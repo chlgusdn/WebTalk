@@ -25,10 +25,10 @@ public class Login extends AppCompatActivity {
     private Socket socket;
     private PrintWriter printWriter;
     private BufferedReader bufferedReader;
-    private String LoginUserName;
-    private String LoginUserProfile;
-    private String LoginUserStateMessage;
-    private int    LoginUserPhoneNumber;
+    public String LoginUserName;
+    public String LoginUserProfile;
+    public String LoginUserStateMessage;
+    public int    LoginUserPhoneNumber;
     private String checkUserEmail;
     private String checkUserPassword;
     private String user_email;
@@ -109,7 +109,7 @@ public class Login extends AppCompatActivity {
             }
         });
     }
-    private Thread reciveThread  = new Thread() {
+    public Thread reciveThread  = new Thread() {
         String[] dataArr;
 
         @Override

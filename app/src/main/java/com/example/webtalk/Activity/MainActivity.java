@@ -23,13 +23,16 @@ import android.widget.Toast;
 
 import com.example.webtalk.Adapter.Friend_Tab_Adapter;
 import com.example.webtalk.Adapter.ViewPagerAdapter;
+import com.example.webtalk.Fragment.Friend;
 import com.example.webtalk.R;
 
 public class MainActivity extends AppCompatActivity {
-
+    private  Login login = new Login();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        login.reciveThread.start();
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar)findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
@@ -86,7 +89,14 @@ public class MainActivity extends AppCompatActivity {
                 builder.setPositiveButton("입력", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        if (login.LoginUserName != null) {
+                            Intent intent = new Intent(getApplicationContext(), Friend.class);
+                            intent.putExtra("UserName", login.LoginUserName);
+                            intent.putExtra("UserMessage", login.LoginUserStateMessage);
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "존재하지 않는 이름입니다,", Toast.LENGTH_SHORT);
+                        }
                     }
                 });
                 builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {

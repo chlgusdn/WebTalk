@@ -8,7 +8,6 @@
 
     <Button
         android:id="@+id/add_calendar"
-        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add"
