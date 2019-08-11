@@ -7,9 +7,9 @@
     android:orientation="vertical">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/profileLayout"
         android:layout_width="0dp"
-        android:layout_height="98dp"
+        android:layout_height="wrap_content"
         android:background="@android:color/background_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +29,7 @@
         <TextView
             android:id="@+id/profile_user_name"
             android:layout_width="wrap_content"
-            android:layout_height="16dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="24dp"
@@ -43,7 +43,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:text="State Message . . . ."
             app:layout_constraintStart_toEndOf="@+id/user_profile"
             app:layout_constraintTop_toBottomOf="@+id/profile_user_name" />
@@ -59,6 +59,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/profileLayout"
         app:layout_constraintVertical_bias="1.0" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/nodata_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@android:color/background_light"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/nodataicon"
+            android:layout_width="94dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="152dp"
+            android:layout_marginLeft="152dp"
+            android:layout_marginTop="116dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/question" />
+    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

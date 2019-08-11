@@ -1,5 +1,6 @@
 package com.example.webtalk.Activity;
 
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -57,10 +58,8 @@ public class chatting_main extends AppCompatActivity {
         ChatMessageDTO msgDto = new ChatMessageDTO(ChatMessageDTO.MSG_TYPE_RECEIVED, "hello");
         msgDtoList.add(msgDto);
 
-        // Create the data adapter with above data list.
         chatAppMsgAdapter = new MessageListAdapter(msgDtoList);
 
-        // Set data adapter to RecyclerView.
         msgRecyclerView.setAdapter(chatAppMsgAdapter);
 
         final EditText msgInputText = (EditText)findViewById(R.id.chat_input_msg);
@@ -74,20 +73,19 @@ public class chatting_main extends AppCompatActivity {
                 if(!TextUtils.isEmpty(msgContent))
                 {
                     data = msgContent;
-                    PrintWriter printWriter = new PrintWriter(bufferedWriter, true);
-                    printWriter.println(msgContent);
-                    // Add a new sent message to the list.
+                    if (socket.isConnected()) {
+                        PrintWriter printWriter = new PrintWriter(bufferedWriter, true);
+                        printWriter.println(msgContent);
+                    }
+
                     msgDtoList.add(new ChatMessageDTO(ChatMessageDTO.MSG_TYPE_SENT, msgContent));
 
                     int newMsgPosition = msgDtoList.size() - 1;
 
-                    // Notify recycler view insert one new data.
                     chatAppMsgAdapter.notifyItemInserted(newMsgPosition);
 
-                    // Scroll RecyclerView to the last message.
                     msgRecyclerView.scrollToPosition(newMsgPosition);
 
-                    // Empty the input edit text box.
                     msgInputText.setText("");
                 }
             }
@@ -95,15 +93,14 @@ public class chatting_main extends AppCompatActivity {
     }
     private Thread recive_Thread = new Thread() {
         public void run() {
-//            Looper.prepare();
-//            mhandler = new Handler();
-//            Looper.loop();
+            SharedPreferences userInfomation = getSharedPreferences("userLoginInfomation", MODE_PRIVATE);
+            SharedPreferences groupCodeInfo = getSharedPreferences("GroupCodeChatting", MODE_PRIVATE);
            try {
                    setSocket("13.209.63.39", 9999);
                    printWriter = new PrintWriter(socket.getOutputStream(), true);
                    bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                   printWriter.println("asd");
-                   printWriter.println("testandroid");
+                   printWriter.println(userInfomation.getString("userName","NULL"));
+                   printWriter.println(groupCodeInfo.getString("GroupCode","NULL"));
                }catch (IOException e) {
                    e.printStackTrace();
                }

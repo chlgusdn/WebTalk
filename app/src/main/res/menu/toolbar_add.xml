@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/group_code_input"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:title="group"
-        app:showAsAction="never" />
     <item
         android:id="@+id/app_bar_search"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="@android:string/search_go"
         app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/group_code_input"
+        android:icon="@drawable/menugroup"
+        android:title="group"
+        app:showAsAction="never|ifRoom" />
     <item
         android:id="@+id/tool_bar_add_friend"
         android:icon="@drawable/add"
         android:title="@android:string/dialog_alert_title"
-        app:showAsAction="ifRoom|always" />
+        app:showAsAction="ifRoom" />
 </menu>

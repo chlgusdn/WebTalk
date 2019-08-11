@@ -3,6 +3,7 @@ package com.example.webtalk.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -30,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = (Toolbar)findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.tool_bar_add_friend :
                 final EditText add_friend_text_field = new EditText(this);
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("친구 추가");
                 builder.setMessage("추가할 친구의 이름을 입력해주세요");
                 builder.setView(add_friend_text_field);
@@ -95,10 +95,11 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "취소", Toast.LENGTH_SHORT);
                     }
                 });
+                builder.show();
                 return true;
             case R.id.group_code_input :
                 final EditText add_friend_text_fieldEditText = new EditText(this);
-                AlertDialog.Builder alert_view = new AlertDialog.Builder(this);
+                AlertDialog.Builder alert_view = new AlertDialog.Builder(MainActivity.this);
                 alert_view.setTitle("그룹코드를 이용한 채팅방");
                 alert_view.setMessage("그룹코드를 이용하여 채팅방에 들어갑니다. 만약 그룹코드가 없으면 채팅방을 만듭니다.");
                 alert_view.setView(add_friend_text_fieldEditText);
@@ -114,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "취소", Toast.LENGTH_SHORT);
                     }
                 });
+                alert_view.show();
             default :
                 return super.onOptionsItemSelected(item) ;
         }

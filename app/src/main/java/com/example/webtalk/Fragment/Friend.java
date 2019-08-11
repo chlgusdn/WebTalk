@@ -1,12 +1,16 @@
 package com.example.webtalk.Fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.webtalk.Adapter.Friend_Tab_Adapter;
 import com.example.webtalk.R;
@@ -24,20 +28,34 @@ public class Friend extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_friend, container, false);
+        SharedPreferences userinfoPreference = view.getContext().getSharedPreferences("userOffLineInfomation", Context.MODE_PRIVATE);
+        SharedPreferences userLoginOnceCheckPreference = view.getContext().getSharedPreferences("userLoginInfomation",Context.MODE_PRIVATE);
+        TextView userNameText = (TextView)view.findViewById(R.id.profile_user_name);
+        TextView userMessagaeText = (TextView)view.findViewById(R.id.profile_state_message);
+
+        if (!userLoginOnceCheckPreference.getString("userName","").equals("")) {
+            userNameText.setText(userLoginOnceCheckPreference.getString("userName",""));
+            userMessagaeText.setText(userLoginOnceCheckPreference.getString("userStateMessage",""));
+        }
+        else {
+            userNameText.setText(userinfoPreference.getString("offlineUserName","NULL"));
+            userMessagaeText.setText(userinfoPreference.getString("offlineUserMessage","NULL"));
+        }
+
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-
-        items.add(new Friend_Tab_item("qwe","hello",R.drawable.domain));
-        items.add(new Friend_Tab_item("asd","hello",R.drawable.domain));
-        items.add(new Friend_Tab_item("qwe","hello",R.drawable.domain));
-        items.add(new Friend_Tab_item("zxc","hello",R.drawable.domain));
-        items.add(new Friend_Tab_item("123s","hello",R.drawable.domain));
         adapter = new Friend_Tab_Adapter(items);
         recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-        //end recyclerviewadapter
+        if (items.isEmpty()) {
+            ConstraintLayout nodata_view = (ConstraintLayout)view.findViewById(R.id.nodata_view);
+            nodata_view.setVisibility(view.VISIBLE);
+            recyclerView.setVisibility(view.GONE);
+        }
+        else {
+            adapter.notifyDataSetChanged();
+        }
         return view;
     }
 }
