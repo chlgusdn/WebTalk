@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class Chatting_Room_Adapter extends RecyclerView.Adapter<Chatting_Room_Adapter.chatting_room_view_holer> {
 
-    private ArrayList<Chatting_Room_item> chatting_array = new ArrayList<Chatting_Room_item>();
+    private ArrayList<Chatting_Room_item> chatting_array;
 
 
     public Chatting_Room_Adapter(ArrayList<Chatting_Room_item> chatting_room_items) {

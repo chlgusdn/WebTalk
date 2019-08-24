@@ -1,6 +1,7 @@
 package com.example.webtalk.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class Friend extends Fragment {
     private Friend_Tab_Adapter adapter;
-    private ArrayList<Friend_Tab_item >items =  new ArrayList<Friend_Tab_item>();
+    private ArrayList<Friend_Tab_item >items =  new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -30,8 +31,8 @@ public class Friend extends Fragment {
         View view = inflater.inflate(R.layout.fragment_friend, container, false);
         SharedPreferences userinfoPreference = view.getContext().getSharedPreferences("userOffLineInfomation", Context.MODE_PRIVATE);
         SharedPreferences userLoginOnceCheckPreference = view.getContext().getSharedPreferences("userLoginInfomation",Context.MODE_PRIVATE);
-        TextView userNameText = (TextView)view.findViewById(R.id.profile_user_name);
-        TextView userMessagaeText = (TextView)view.findViewById(R.id.profile_state_message);
+        TextView userNameText = view.findViewById(R.id.profile_user_name);
+        TextView userMessagaeText = view.findViewById(R.id.profile_state_message);
 
         if (!userLoginOnceCheckPreference.getString("userName","").equals("")) {
             userNameText.setText(userLoginOnceCheckPreference.getString("userName",""));
@@ -48,8 +49,26 @@ public class Friend extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new Friend_Tab_Adapter(items);
         recyclerView.setAdapter(adapter);
+
+        Bundle bundle =getArguments();
+        String AddUserName = "NULL";
+        String AddUserStateMessage = "NULL";
+        try {
+            if (!bundle.getString("AddFriendUserName").isEmpty()) {
+                AddUserName = bundle.getString("AddFriendUserName");
+                AddUserStateMessage = bundle.getString("AddFriendUserMessage");
+            }
+
+            if (!AddUserName.equals("NULL") && !AddUserStateMessage.equals("NULL")) {
+                items.add(new Friend_Tab_item(AddUserName,AddUserStateMessage,R.drawable.domain));
+                adapter.notifyDataSetChanged();
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
         if (items.isEmpty()) {
-            ConstraintLayout nodata_view = (ConstraintLayout)view.findViewById(R.id.nodata_view);
+            ConstraintLayout nodata_view = view.findViewById(R.id.nodata_view);
             nodata_view.setVisibility(view.VISIBLE);
             recyclerView.setVisibility(view.GONE);
         }

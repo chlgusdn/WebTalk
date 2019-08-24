@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -26,13 +27,26 @@ import com.example.webtalk.Adapter.ViewPagerAdapter;
 import com.example.webtalk.Fragment.Friend;
 import com.example.webtalk.R;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.nio.Buffer;
+
 public class MainActivity extends AppCompatActivity {
     private  Login login = new Login();
+    private Socket socket;
+    private BufferedReader bufferedReader;
+    private PrintWriter printWriter;
+    private String addUserName;
+    private String addUserStateMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        login.reciveThread.start();
-
+        AddUserInfo.start();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar)findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
@@ -90,9 +104,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (login.LoginUserName != null) {
-                            Intent intent = new Intent(getApplicationContext(), Friend.class);
-                            intent.putExtra("UserName", login.LoginUserName);
-                            intent.putExtra("UserMessage", login.LoginUserStateMessage);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("AddFriendUserName",addUserName);
+                            bundle.putString("AddFriendUserStateMessage",addUserStateMessage);
+                            Friend friend = new Friend();
+                            friend.setArguments(bundle);
                         }
                         else {
                             Toast.makeText(getApplicationContext(), "존재하지 않는 이름입니다,", Toast.LENGTH_SHORT);
@@ -108,15 +124,21 @@ public class MainActivity extends AppCompatActivity {
                 builder.show();
                 return true;
             case R.id.group_code_input :
-                final EditText add_friend_text_fieldEditText = new EditText(this);
+                final EditText addChattingTextField = new EditText(this);
                 AlertDialog.Builder alert_view = new AlertDialog.Builder(MainActivity.this);
                 alert_view.setTitle("그룹코드를 이용한 채팅방");
                 alert_view.setMessage("그룹코드를 이용하여 채팅방에 들어갑니다. 만약 그룹코드가 없으면 채팅방을 만듭니다.");
-                alert_view.setView(add_friend_text_fieldEditText);
+                alert_view.setView(addChattingTextField);
                 alert_view.setPositiveButton("입력", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        SharedPreferences groupCodeMessageRoom = getSharedPreferences("GroupCodeChatting",MODE_PRIVATE);
+                        SharedPreferences.Editor editor = groupCodeMessageRoom.edit();
+                        editor.putString("GroupCode",addChattingTextField.getText().toString());
+                        editor.apply();
+                        Intent intent = new Intent(getApplicationContext(), chatting_main.class);
+                        startActivity(intent);
+                        finish();
                     }
                 });
                 alert_view.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -131,4 +153,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private Thread AddUserInfo = new Thread() {
+        String[] dataArr;
+
+        @Override
+        public void run() {
+            setSoket("13.209.63.39", 9997);
+            try {
+                while (socket!= null && socket.isConnected()) {
+                    String data = bufferedReader.readLine();
+                    dataArr = data.split(",");
+                    System.out.print(dataArr);
+                    addUserName = dataArr[0];
+                    addUserStateMessage = dataArr[4];
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+    private void setSoket(String ip, int port) {
+        try {
+            socket = new Socket(ip, port);
+            bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

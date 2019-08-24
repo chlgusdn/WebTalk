@@ -22,17 +22,20 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Login extends AppCompatActivity {
+
     private Socket socket;
     private PrintWriter printWriter;
     private BufferedReader bufferedReader;
-    public String LoginUserName;
-    public String LoginUserProfile;
-    public String LoginUserStateMessage;
-    public int    LoginUserPhoneNumber;
     private String checkUserEmail;
     private String checkUserPassword;
     private String user_email;
     private String user_password;
+
+    public String LoginUserName;
+    public String LoginUserProfile;
+    public String LoginUserStateMessage;
+    public int    LoginUserPhoneNumber;
+
     public boolean isNetWork = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
